@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h1 class="text-center mt-5">Bitcoin Price</h1>
+        <div id="price" class="text-center">
+          <span id="price_label">xxxx.xx</span> €
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const url = 'https://blockchain.info/ticker';
+
+    function recupererPrix() {
+      let requete = new XMLHttpRequest();
+      requete.open('GET', url);
+      requete.responseType = 'json';
+      requete.send();
+
+      requete.onload = function () {
+        if (requete.readyState === XMLHttpRequest.DONE) {
+          if (requete.status === 200) {
+            let reponse = requete.response;
+            let prixEnEuros = reponse.EUR.last;
+            document.querySelector('#price_label').textContent = prixEnEuros;
+          } else {
+            alert('Un problème est intervenu, merci de revenir plus tard.');
+          }
+        }
+      };
+    }
+
+    // Appel initial
+    recupererPrix();
+
+    // Mise à jour toutes les secondes
+    setInterval(recupererPrix, 1000);
+  </script>
+</body>
+</html>
